@@ -1,0 +1,4 @@
+flask
+waitress
+pyyaml
+flask_httpauth

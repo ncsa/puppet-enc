@@ -1,0 +1,96 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-enc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  #storageClassName: 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: puppet-enc
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: puppet-enc
+  template:
+    metadata:
+      labels:
+        app: puppet-enc
+    spec:
+      initContainers:
+        - name: copy-data
+          image: ncsa/puppet-enc
+          command:
+            - sh
+            - '-c'
+          args:
+            - >-
+              cd /app/data;
+              for f in *.yaml; do
+                if [ ! -e /data.pvc/$f ]; then
+                  cp $f /data.pvc/$f
+                fi;
+              done
+          volumeMounts:
+            - name: data
+              mountPath: /data.pvc/
+      containers:
+        - name: enc
+          image: ncsa/puppet-enc
+          ports:
+            - name: http
+              containerPort: 8080
+              hostPort: 8080
+          env:
+            - name: PREFIX
+              value: /enc
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          livenessProbe:
+            httpGet:
+              path: /enc/healthz
+              port: http
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-enc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: puppet-enc
+spec:
+  ports:
+  - name: http
+    targetPort: http
+    port: 8080
+  selector:
+    app: puppet-enc
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: puppet-enc
+spec:
+  tls:
+  - secretName: puppet.example.com
+  rules:
+  - host: puppet.example.com
+    http:
+      paths:
+      - path: /enc/
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: puppet-enc
+            port:
+              number: 8080

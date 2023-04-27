@@ -1,0 +1,12 @@
+admin:
+  password: pbkdf2:sha256:260000$t2Ks8rp69wPx2OF3$630363a58db1a18da2542008e4bcfcd2876e476de39cb7ba334fd744a6d2b0e2
+  roles:
+  - admin
+user:
+  password: pbkdf2:sha256:260000$EUBvsZZ0H6bTEDH9$f31057490735a2b6fcb4c8dab9e1c08ddb879a8347a3bd39c7ab0a6fdf94ec8a
+  roles:
+  - user
+puppet:
+  password: pbkdf2:sha256:260000$h92toOoGjMJrDNs0$b1da21420a141c8133917e3a3a3933718d3940be8f2f39b64580ccb913ac1010
+  roles:
+  - viewer

@@ -1,0 +1,7 @@
+default:
+  classes:
+    profile::base:
+  environment: production
+  hosts: []
+  parameters:
+    project: undefined
