@@ -23,6 +23,7 @@ jobs:
         run: |
           GHCR_ENABLED="true"
           echo "GHCR_ENABLED=${GHCR_ENABLED}"
+          echo "GHCR_ENABLED=${GHCR_ENABLED}" >> $GITHUB_ENV
 
           DOCKERHUB_ENABLED="false"
           if [ "${{ secrets.DOCKERHUB_USERNAME }}" != "" -a "${{ secrets.DOCKERHUB_TOKEN }}" != "" ]; then
@@ -32,6 +33,7 @@ jobs:
             fi
           fi
           echo "DOCKERHUB_ENABLED=${DOCKERHUB_ENABLED}"
+          echo "DOCKERHUB_ENABLED=${DOCKERHUB_ENABLED}" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
