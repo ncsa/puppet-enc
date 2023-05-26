@@ -25,7 +25,7 @@ jobs:
           echo "GHCR_ENABLED=${GHCR_ENABLED}"
 
           DOCKERHUB_ENABLED="false"
-          if [ "${{ secrets.DOCKERHUB_USERNAME }}" != "" -a "${{ secrets.DOCKERHUB_PASSWORD }}" != "" ]; then
+          if [ "${{ secrets.DOCKERHUB_USERNAME }}" != "" -a "${{ secrets.DOCKERHUB_TOKEN }}" != "" ]; then
             DOCKERHUB_ENABLED="true"
             if [ -e "README.md" ]; then
               DOCKERHUB_README="true"
