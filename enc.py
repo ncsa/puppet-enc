@@ -15,7 +15,10 @@ auth = HTTPBasicAuth()
 
 def make_response(data):
     """Create yaml response."""
-    resp = Response(response=yaml.dump(data), status=200,  mimetype="text/yaml")
+    if data:
+        resp = Response(response=yaml.dump(data), status=200,  mimetype="text/yaml")
+    else:
+        resp = Response(response="", status=200, mimetype="text/yaml")
     # resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -252,7 +255,7 @@ def update_group(name):
 def delete_group(name):
     if name not in _groups:
         abort(404)
-    if name == "default"
+    if name == "default":
         abort(403)
     return save_data("users", name, None)
 
